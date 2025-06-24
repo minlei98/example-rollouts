@@ -1,0 +1,11 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: example-rollout
+spec:
+  replicas: 5
+  template:
+    spec:
+      containers:
+      - name: example
+        image: argoproj/rollouts-demo:yellow

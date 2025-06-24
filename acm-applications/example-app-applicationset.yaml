@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: example-multi-env
+  namespace: openshift-gitops
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+          - key: environment
+            operator: In
+            values:
+              - int
+              - stage
+              - prod
+      values:
+        # Pass the cluster's 'name' explicitly, although '{{name}}' often works directly.
+        cluster_name: "{{name}}"
+        # Explicitly map the 'environment' label value into a custom 'env_label_value' key
+        env_label_value: "{{metadata.labels.environment}}"
+        # Retain your original git_path
+        git_path: "applications/example-app/overlays/{{metadata.labels.environment}}"
+  template:
+    metadata:
+      # Now use the explicitly mapped value from 'values'
+      name: 'example-{{values.cluster_name}}'
+      labels:
+        # Now use the explicitly mapped value from 'values'
+        environment: "{{values.env_label_value}}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/minlei98/example-rollouts.git
+        targetRevision: HEAD
+        path: "{{values.git_path}}"
+      destination:
+        namespace: example-app
+        name: "{{values.cluster_name}}" # Still using cluster_name from values
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true

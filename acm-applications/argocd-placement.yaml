@@ -1,0 +1,29 @@
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: argocd-milei-placement
+  namespace: openshift-gitops
+spec:
+  clusterSets:
+  - milei-int-clusterset
+  - milei-prod-clusterset
+  - milei-stage-clusterset
+  tolerations:
+    - key: "cluster.open-cluster-management.io/unreachable"
+      operator: Exists
+    - key: "cluster.open-cluster-management.io/unavailable"
+      operator: Exists
+
+---
+apiVersion: apps.open-cluster-management.io/v1beta1
+kind: GitOpsCluster
+metadata:
+  name: argocd-milei
+  namespace: openshift-gitops
+spec:
+  argoServer:
+    argoNamespace: openshift-gitops
+  placementRef:
+    apiVersion: cluster.open-cluster-management.io/v1beta1
+    kind: Placement
+    name: argocd-milei-placement
