@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: web-app-health-check
+spec:
+  # Define arguments that can be passed to the template (e.g., the service name to check)
+  args:
+  - name: service-url # Example argument for the web provider URL
+  metrics:
+  - name: canary-health-status
+    interval: 10s # Check every 10 seconds
+    count: 3    # Perform 3 checks
+    successCondition: "result == '200'" # Expect the HTTP status code 200 for success
+    failureLimit: 1 # Fail if more than 1 check fails
+    provider:
+      web:
+        url: "{{args.service-url}}" # URL to hit for health check
+        jsonPath: "$.status_code" # Assuming the endpoint returns a JSON with a 'status_code' field
