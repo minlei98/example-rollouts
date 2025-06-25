@@ -13,7 +13,7 @@ spec:
     canary:
       steps:
       - setWeight: 50
-      - analysis:- analysis:
+      - analysis:
           templates:
           - templateName: cpu-usage-below-80-check # Reference the new AnalysisTemplate
             args:
