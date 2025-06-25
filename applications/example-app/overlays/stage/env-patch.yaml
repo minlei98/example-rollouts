@@ -12,7 +12,13 @@ spec:
   strategy:
     canary:
       steps:
-      - setWeight: 50
-      - pause: {} # Manual judgement or automated analysis
-      - setWeight: 100
-      - pause: {duration: 1m}
+      - setWeight: 10
+      - analysis:
+          templates:
+          - templateName: web-app-health-check # Reference to your AnalysisTemplate
+            args:
+            - name: service-url
+              value: "http://www.google.com" # Example URL
+      - pause: { duration: 1h } # Soak time after analysis
+      - setWeight: 25
+      - pause: {} # Manual approval
