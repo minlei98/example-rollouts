@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: cpu-usage-below-80-check
+spec:
+  # Define arguments to make this template reusable for different applications/namespaces
+  args:
+  - name: app-namespace        # Namespace where the application pods are running
+  - name: app-pod-regex        # Regular expression to match your canary pods (e.g., "my-app-canary-.*")
+  metrics:
+  - name: canary-cpu-utilization
+    interval: 30s             # How often to query Prometheus (every 30 seconds)
+    count: 3                  # Number of successful checks required for overall success
+    # The success condition.
+    # 'result[0]' refers to the value returned by the Prometheus query.
+    # '0.8' represents 80% of a single CPU core. This query measures CPU cores used.
+    # So, 'result[0] < 0.8' means the average CPU usage of the canary pods is less than 0.8 cores.
+    successCondition: "result[0] < 0.8"
+    # The failure limit. If the successCondition is not met for this many times,
+    # the AnalysisRun will fail, causing the Rollout to abort.
+    failureLimit: 1
+    provider:
+      prometheus:
+        # Prometheus server address. This is a common default for Prometheus Operator
+        # deployments in Kubernetes/OpenShift. Adjust if your Prometheus service is different.
+        address: http://prometheus-operated:9090 
+        query: |
+          # Query to sum the average CPU usage rate over the last 5 minutes for pods
+          # matching the provided namespace and regex. This gives the CPU cores utilized.
+          sum(rate(container_cpu_usage_seconds_total{namespace="{{args.app-namespace}}", pod=~"{{args.app-pod-regex}}"}[5m]))
