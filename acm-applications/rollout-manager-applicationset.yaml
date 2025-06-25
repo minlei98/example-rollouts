@@ -27,7 +27,7 @@ spec:
     spec:
       project: default # Your Argo CD project
       source:
-        repoURL: https://github.com/minlei98/example-rollout.git # Your GitOps repo
+        repoURL: https://github.com/minlei98/example-rollouts.git # Your GitOps repo
         targetRevision: HEAD
         path: "platform/argorollouts/base" # Path to your RolloutManager Kustomize base
       destination:
