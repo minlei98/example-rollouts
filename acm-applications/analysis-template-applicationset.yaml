@@ -31,15 +31,15 @@ spec:
         repoURL: 'https://github.com/minlei98/example-rollouts.git' # Your Git repository
         targetRevision: HEAD # Or a specific branch/tag for stable analysis templates
         # This path points to the directory containing your AnalysisTemplate(s) in Git
-        path: analysis-templates 
+        path: analysis-templates
 
       destination:
         server: '{{server}}' # Inherited from the generator's 'server' field (the cluster API server URL)
         # The namespace on the target cluster where the AnalysisTemplate(s) should be deployed.
         # This should typically be the same namespace where your Argo Rollouts controller runs
         # or where your applications that use these templates are deployed.
-        namespace: example-app # Example: Deploy templates to the same namespace as your Rollouts
-      
+        namespace: openshift-gitops # Example: Deploy templates to the same namespace as your Rollouts
+
       syncPolicy:
         automated:
           prune: true # Allow Argo CD to prune resources that are no longer in Git
