@@ -23,7 +23,7 @@ spec:
       prometheus:
         # Prometheus server address. This is a common default for Prometheus Operator
         # deployments in Kubernetes/OpenShift. Adjust if your Prometheus service is different.
-        address: http://prometheus-operated:9090 
+        address: http://prometheus-user-workload.openshift-user-workload-monitoring.svc.cluster.local:9090
         query: |
           # Query to sum the average CPU usage rate over the last 5 minutes for pods
           # matching the provided namespace and regex. This gives the CPU cores utilized.
