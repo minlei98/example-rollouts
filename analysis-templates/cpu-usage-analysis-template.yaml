@@ -4,9 +4,9 @@ metadata:
   name: cpu-usage-below-80-check
 spec:
   # Define arguments to make this template reusable for different applications/namespaces
-  args:
-  - name: app-namespace        # Namespace where the application pods are running
-  - name: app-pod-regex        # Regular expression to match your canary pods (e.g., "my-app-canary-.*")
+  #args:
+  #- name: app-namespace        # Namespace where the application pods are running
+  #- name: app-pod-regex        # Regular expression to match your canary pods (e.g., "my-app-canary-.*")
   metrics:
   - name: canary-cpu-utilization
     interval: 30s             # How often to query Prometheus (every 30 seconds)
@@ -27,4 +27,4 @@ spec:
         query: |
           # Query to sum the average CPU usage rate over the last 5 minutes for pods
           # matching the provided namespace and regex. This gives the CPU cores utilized.
-          sum(rate(container_cpu_usage_seconds_total{namespace="{{args.app-namespace}}", pod=~"{{args.app-pod-regex}}"}[5m]))
+          sum(rate(container_cpu_usage_seconds_total{namespace="example-app", pod=~"example-rollout-.*"}[5m]))

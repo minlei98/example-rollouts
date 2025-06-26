@@ -16,10 +16,10 @@ spec:
       - analysis:
           templates:
           - templateName: cpu-usage-below-80-check # Reference the new AnalysisTemplate
-            args:
-            - name: app-namespace
-              value: example-app # Namespace where your application is deployed
-            - name: app-pod-regex
-              value: "example-rollout-.*" # Regex matching your application's pods
+            #args:
+            #- name: app-namespace
+            #  value: example-app
+            #- name: app-pod-regex
+            #  value: "example-rollout-.*" # Regex matching your application's pods
       - pause: { duration: 5m } # Soak time after analysis
       - setWeight: 100
