@@ -38,7 +38,7 @@ spec:
         # The namespace on the target cluster where the AnalysisTemplate(s) should be deployed.
         # This should typically be the same namespace where your Argo Rollouts controller runs
         # or where your applications that use these templates are deployed.
-        namespace: openshift-gitops # Example: Deploy templates to the same namespace as your Rollouts
+        namespace: example-app # Example: Deploy templates to the same namespace as your Rollouts
 
       syncPolicy:
         automated:
